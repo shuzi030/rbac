@@ -1,0 +1,102 @@
+大家自己实现：部门删除、员工删除（员工表、员工角色中间表）、角色编辑和删除（角色表、员工角色中间表、角色权限中间表）
+
+### rbac权限模型  ： 用户、角色、权限
+（用户）  ---多对多---  （角色）  ---多对多--- （权限）
+
+1. 在前端代码已经写好的情况下（前端能看懂即可），我们去编写后端接口。
+2. 接口（功能接口---http请求）四要素，请求地址是什么、参数是什么、功能是什么、返回什么
+
+controller >> service >> mapper
+开发时，先写controller，再写service，最后写mapper
+3. 登录功能
+    a.请求地址 : user/login
+    b.请求参数: username、password
+    c.功能：
+          Controller控制器中的代码
+          1.在控制器中获取Subject
+          2.封装token
+          3.执行登录功能
+
+          UserRealm的认证方法编写具体的认证代码
+          UserRealm的授权方法
+
+          在页面上编写shiro权限相关代码
+
+    d.返回：success、msg
+
+4. 部门管理
+   1）、部门查询
+       a.请求地址 :  /department/list
+       b.请求参数:  无
+       c.功能： 查询所有部门信息
+       d.返回： 跳转到department/list.html（视图）    携带数据（pageInfo、qo）（模型）
+   2）、部门添加
+       a.请求地址 :  /department/saveOrUpdate
+       b.请求参数:  name、sn
+       c.功能：接收数据，添加到数据库
+       d.返回： 重定向到department/list接口
+   3）、部门编辑
+       a.请求地址 :  /department/saveOrUpdate
+       b.请求参数: id、name、sn
+       c.功能： 根据参数修改数据
+       d.返回： 重定向到department/list接口
+
+5. 员工管理
+   1）、员工查询
+       a.请求地址:  /employee/list
+       b.请求参数: 无
+       c.功能： 分页查询员工数据
+       d.返回：跳转到employee/list.html（视图）    携带数据（departments、pageInfo、qo（currentPage、pageSize、keyword、deptId））（模型）
+   2）、添加回显
+       a.请求地址:  /employee/input
+       b.请求参数: 无
+       c.功能： 跳转到员工添加impuinput页面，查询roles、departments
+       d.返回：跳转到employee/input.html（视图）    携带数据（roles、departments）
+
+   3）、添加员工
+       a.请求地址:  /employee/saveOrUpdate
+       b.请求参数:username、name、password、repassword、email、age、dept.id
+                 roleIds
+       c.功能：1.保存员工数据到员工表；2.添加数据到中间表
+       d.返回： 重定向到/employee/list接口
+   4）、编辑回显
+       a.请求地址:  /employee/input
+       b.请求参数: id
+       c.功能： 跳转到员工添加impuinput页面，根据id查询当前要编辑的员工数据employee（dept的id要赋值、roles属性要赋值）、roles、departments
+       d.返回：跳转到employee/input.html（视图）    携带数据（roles、departments）
+
+   5）、编辑员工
+       a.请求地址:  /employee/saveOrUpdate
+       b.请求参数：id、name、email、age、dept.id
+                  roleIds
+       c.功能：1.根据参数修改员工表；2.修改中间表的数据
+       d.返回： 重定向到/employee/list接口
+
+6. 角色管理
+   1）、角色查询
+       a.请求地址:  /role/list
+       b.请求参数: 无
+       c.功能： 分页查询角色数据
+       d.返回：跳转到role/list.html（视图）    携带数据（pageInfo、qo（currentPage、pageSize））（模型）
+   2）、添加回显
+       a.请求地址:  /role/input
+       b.请求参数: 无
+       c.功能： 查询所有权限，跳转到role/input.html
+       d.返回：所有权限，跳转到role/input.html
+   3）、角色添加
+       a.请求地址:  /role/saveOrUpdate
+       b.请求参数: name、sn    permissionIds
+       c.功能：1.添加数据到角色表；  2.添加数据到角色权限中间表
+       d.返回：重定向到/role/list接口
+6. 权限查询(传统项目的权限，都是只能查，不能增删改) -----普通用户没有资格增删改权限
+   a.请求地址: /permission/list
+   b.请求参数: 无
+   c.功能： 分页查询权限数据
+   d.返回： 跳转到permission.list.html页面  返回pageInfo、qo
+
+7.shiro权限框架
+
+templates
+
+
+

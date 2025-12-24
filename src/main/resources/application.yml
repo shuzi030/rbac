@@ -1,0 +1,39 @@
+#�˿�
+server:
+  port: 9090
+
+#thymeleaf������
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    druid:
+      url: jdbc:mysql:///rbac
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-circular-references: true #�ſ�������ѭ��������Ҫ��
+
+#mybatis����������
+mybatis:
+  configuration:
+    lazy-load-trigger-methods: clone
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印MyBatis的日志
+    map-underscore-to-camel-case: true  #开启驼峰命名
+
+#pageHelper������
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  page-size-zero: true
+
+## ���� mapper ��־��ӡ����
+logging:
+  level:
+    com:
+      bjpowernode:
+        rbac:
+          mapper: debug
