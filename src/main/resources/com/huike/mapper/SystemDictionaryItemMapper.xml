@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.mapper.SystemDictionaryItemMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.huike.entity.SystemDictionaryItem">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="title" property="title" />
+        <result column="sequence" property="sequence" />
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, title, sequence
+    </sql>
+    
+    <!-- 根据父ID查询字典项列表 -->
+    <select id="listByParentId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM systemdictionaryitem
+        WHERE parent_id = #{parentId}
+        ORDER BY sequence ASC, id ASC
+    </select>
+    
+    <!-- 根据ID查询字典项 -->
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM systemdictionaryitem
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据字典SN查询字典项列表 -->
+    <select id="listBySn" resultMap="BaseResultMap">
+        SELECT sdi.<include refid="Base_Column_List" />
+        FROM systemdictionaryitem sdi
+        INNER JOIN systemdictionary sd ON sdi.parent_id = sd.id
+        WHERE sd.sn = #{sn}
+        ORDER BY sdi.sequence ASC, sdi.id ASC
+    </select>
+    
+</mapper>

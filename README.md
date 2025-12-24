@@ -124,14 +124,80 @@ rbac/
 - 员工角色分配
 
 ### 6. 客户管理
-- 客户信息管理
-- 客户池管理
-- 潜在客户管理
-- 正式客户管理
-- 流失客户管理
-- 失败客户管理
-- 客户跟进记录
-- 客户转移记录
+
+#### 6.1 客户信息管理（CustomerController）
+- **路由地址**: `/customer/*`
+- **功能列表**:
+  - `/customer/list` - 客户列表页面（分页查询所有客户）
+  - `/customer/customerPool` - 客户池页面（未分配销售人员的客户）
+  - `/customer/potentialCustomer` - 潜在客户列表（status=0）
+  - `/customer/formalCustomer` - 正式客户列表（status=1）
+  - `/customer/loseCustomer` - 流失客户列表（status=2）
+  - `/customer/failCustomer` - 失败客户列表（status=3）
+  - `/customer/input` - 客户添加/编辑表单页面
+  - `/customer/saveOrUpdate` - 保存或更新客户信息
+  - `/customer/delete` - 删除客户（Ajax）
+  - `/customer/assign` - 分配客户给销售人员（Ajax）
+  - `/customer/updateStatus` - 更新客户状态（Ajax）
+  - `/customer/echarts` - 客户数据可视化统计页面
+
+- **客户信息字段**:
+  - 基本信息：姓名、年龄、性别、电话、QQ
+  - 职业信息（关联 SystemDictionaryItem - job）
+  - 客户来源（关联 SystemDictionaryItem - source）
+  - 销售人员（关联 Employee）
+  - 录入人员（关联 Employee）
+  - 录入时间、客户状态
+
+#### 6.2 客户跟进记录（CustomerTraceHistoryController）
+- **路由地址**: `/traceHistory/*`
+- **功能列表**:
+  - `/traceHistory/toTraceHistoryPage` - 跟进历史页面
+  - `/traceHistory/listByCustomerId` - 根据客户ID查询跟进记录（Ajax）
+  - `/traceHistory/input` - 跟进记录表单页面
+  - `/traceHistory/saveOrUpdate` - 保存或更新跟进记录
+  - `/traceHistory/delete` - 删除跟进记录（Ajax）
+  - `/traceHistory/listRecent` - 查询最近的跟进记录（Ajax）
+
+- **跟进记录字段**:
+  - 跟进时间、跟进详情
+  - 跟进类型（关联 SystemDictionaryItem - communicationMethod）
+  - 跟进结果（关联 SystemDictionaryItem - wantedLevel）
+  - 备注、关联客户、录入人员、录入时间
+  - 类型（关联 SystemDictionaryItem - tracePurpose）
+
+#### 6.3 客户转移记录（CustomerTransferController）
+- **路由地址**: `/transfer/*`
+- **功能列表**:
+  - `/transfer/toTransferPage` - 转移历史页面
+  - `/transfer/listByCustomerId` - 根据客户ID查询转移记录（Ajax）
+  - `/transfer/input` - 客户转移表单页面
+  - `/transfer/doTransfer` - 执行客户转移（Ajax）
+  - `/transfer/batchTransfer` - 批量转移客户（Ajax）
+  - `/transfer/delete` - 删除转移记录（Ajax）
+
+- **转移记录字段**:
+  - 关联客户、操作人员、操作时间
+  - 原销售人员、新销售人员
+  - 转移原因
+
+#### 6.4 数据字典（SystemDictionaryItemService）
+- **职业类型（job）**: 学生、老师、司机、老板、秘书等
+- **客户来源（source）**: 自身途径、营销广告、老学员推荐等
+- **跟进类型（communicationMethod）**: 营销QQ、来电咨询、去电跟踪、短信等
+- **跟进结果（wantedLevel）**: ★、★★、★★★等意向程度
+- **跟进目的（tracePurpose）**: 潜在客户跟进、常规跟进、正式客户跟进等
+
+#### 6.5 前端页面
+- `customer/list.html` - 客户列表
+- `customer/customerpoollist.html` - 客户池列表
+- `customer/potentialcustomerlist.html` - 潜在客户列表
+- `customer/formallist.html` - 正式客户列表
+- `customer/losecustomerlist.html` - 流失客户列表
+- `customer/failcustomerlist.html` - 失败客户列表
+- `customer/echarts.html` - 客户数据可视化
+- `history/tracehistorypage.html` - 跟进历史页面
+- `history/transferpage.html` - 转移历史页面
 
 ### 7. 数据可视化
 - 使用 ECharts 展示业务数据统计图表

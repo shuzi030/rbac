@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.mapper.CustomerMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.huike.entity.Customer">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="age" property="age" />
+        <result column="gender" property="gender" />
+        <result column="tel" property="tel" />
+        <result column="qq" property="qq" />
+        <result column="job_id" property="jobId" />
+        <result column="source_id" property="sourceId" />
+        <result column="seller_id" property="sellerId" />
+        <result column="inputUser_id" property="inputUserId" />
+        <result column="input_time" property="inputTime" />
+        <result column="status" property="status" />
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, name, age, gender, tel, qq, job_id, source_id, seller_id, 
+        inputUser_id, input_time, status
+    </sql>
+    
+    <!-- 分页查询客户列表 -->
+    <select id="list" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customer
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') 
+                OR tel LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY input_time DESC
+    </select>
+    
+    <!-- 根据ID查询客户 -->
+    <select id="getCustomerById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customer
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 新增客户 -->
+    <insert id="save" parameterType="com.huike.entity.Customer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO customer (
+            name, age, gender, tel, qq, job_id, source_id, 
+            seller_id, inputUser_id, input_time, status
+        ) VALUES (
+            #{name}, #{age}, #{gender}, #{tel}, #{qq}, #{jobId}, #{sourceId},
+            #{sellerId}, #{inputUserId}, #{inputTime}, #{status}
+        )
+    </insert>
+    
+    <!-- 更新客户 -->
+    <update id="update" parameterType="com.huike.entity.Customer">
+        UPDATE customer
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="sellerId != null">seller_id = #{sellerId},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除客户 -->
+    <delete id="delete">
+        DELETE FROM customer WHERE id = #{id}
+    </delete>
+    
+    <!-- 分配销售人员 -->
+    <update id="assignSeller">
+        UPDATE customer
+        SET seller_id = #{sellerId}
+        WHERE id = #{customerId}
+    </update>
+    
+    <!-- 查询客户池(未分配销售人员的客户) -->
+    <select id="listCustomerPool" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customer
+        <where>
+            seller_id IS NULL OR seller_id = 0
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') 
+                OR tel LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY input_time DESC
+    </select>
+    
+    <!-- 根据销售人员ID查询客户 -->
+    <select id="listBySellerId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customer
+        WHERE seller_id = #{sellerId}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY input_time DESC
+    </select>
+    
+    <!-- 更新客户状态 -->
+    <update id="updateStatus">
+        UPDATE customer
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 统计各状态客户数量 -->
+    <select id="countByStatus" resultType="java.util.Map">
+        SELECT 
+            status,
+            COUNT(*) as count,
+            CASE status
+                WHEN 0 THEN '潜在客户'
+                WHEN 1 THEN '正式客户'
+                WHEN 2 THEN '流失客户'
+                WHEN 3 THEN '失败客户'
+                ELSE '未知'
+            END as statusName
+        FROM customer
+        GROUP BY status
+        ORDER BY status
+    </select>
+    
+    <!-- 查询所有客户 -->
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customer
+        ORDER BY input_time DESC
+    </select>
+    
+</mapper>

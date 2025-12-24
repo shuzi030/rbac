@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.mapper.CustomerTransferMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.huike.entity.CustomerTransfer">
+        <id column="id" property="id" />
+        <result column="customer_id" property="customerId" />
+        <result column="operator_id" property="operatorId" />
+        <result column="operate_time" property="operateTime" />
+        <result column="oldSeller_id" property="oldSellerId" />
+        <result column="newSeller_id" property="newSellerId" />
+        <result column="reason" property="reason" />
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, customer_id, operator_id, operate_time, oldSeller_id, newSeller_id, reason
+    </sql>
+    
+    <!-- 根据客户ID查询转移记录 -->
+    <select id="listByCustomerId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customertransfer
+        WHERE customer_id = #{customerId}
+        ORDER BY operate_time DESC
+    </select>
+    
+    <!-- 分页查询转移记录 -->
+    <select id="list" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customertransfer
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND reason LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY operate_time DESC
+    </select>
+    
+    <!-- 根据ID查询转移记录 -->
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM customertransfer
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 新增转移记录 -->
+    <insert id="save" parameterType="com.huike.entity.CustomerTransfer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO customertransfer (
+            customer_id, operator_id, operate_time, oldSeller_id, newSeller_id, reason
+        ) VALUES (
+            #{customerId}, #{operatorId}, #{operateTime}, #{oldSellerId}, #{newSellerId}, #{reason}
+        )
+    </insert>
+    
+    <!-- 删除转移记录 -->
+    <delete id="delete">
+        DELETE FROM customertransfer WHERE id = #{id}
+    </delete>
+    
+</mapper>
