@@ -23,6 +23,11 @@ import java.util.Map;
 
 /**
  * 客户管理控制器
+ * 0 = 流失客户
+ * 1 = 开发失败
+ * 2 = 潜在客户
+ * 3 = 正式客户
+ * 4 = 资源池客户
  */
 @Controller
 @RequestMapping("/customer")
@@ -86,11 +91,11 @@ public class CustomerController {
     /**
      * 潜在客户列表
      * 请求地址: /customer/potentialCustomer
-     * 功能: 显示状态为潜在客户(status=0)的客户
+     * 功能: 显示状态为潜在客户(status=2)的客户
      */
     @RequestMapping("/potentialCustomer")
     public String potentialCustomer(Model model, @ModelAttribute("qo") CustomerQuery qo) {
-        qo.setStatus(0L); // 潜在客户状态
+        qo.setStatus(2L); // 潜在客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
         // 查询数据字典: 职业、来源、跟进类型、跟进目的
@@ -146,11 +151,11 @@ public class CustomerController {
     /**
      * 流失客户列表
      * 请求地址: /customer/loseCustomer
-     * 功能: 显示状态为流失客户(status=2)的客户
+     * 功能: 显示状态为流失客户(status=0)的客户
      */
     @RequestMapping("/loseCustomer")
     public String loseCustomer(Model model, @ModelAttribute("qo") CustomerQuery qo) {
-        qo.setStatus(2L); // 流失客户状态
+        qo.setStatus(0L); // 流失客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
         // 查询数据字典和员工列表
@@ -238,7 +243,7 @@ public class CustomerController {
         if (customer.getId() == null) {
             // 新增
             customer.setInputUserId(currentUser.getId());
-            customer.setStatus(0); // 默认为潜在客户
+            customer.setStatus(3); // 默认为潜在客户
             customerService.save(customer);
         } else {
             // 更新
