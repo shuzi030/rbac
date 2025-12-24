@@ -72,7 +72,13 @@ public class CustomerController {
     public String customerPool(Model model, @ModelAttribute("qo") CustomerQuery qo) {
         PageInfo<Customer> pageInfo = customerService.listCustomerPool(qo);
         
+        // 查询销售人员和员工列表
+        List<Employee> sellers = employeeService.getAll();
+        List<Employee> employees = employeeService.getAll();
+        
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("sellers", sellers);
+        model.addAttribute("employees", employees);
         
         return "customer/customerpoollist";
     }
@@ -87,7 +93,23 @@ public class CustomerController {
         qo.setStatus(0L); // 潜在客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
+        // 查询数据字典: 职业、来源、跟进类型、跟进目的
+        List<SystemDictionaryItem> jobs = dictionaryItemService.listBySn("job");
+        List<SystemDictionaryItem> sources = dictionaryItemService.listBySn("source");
+        List<SystemDictionaryItem> traceTypeIds = dictionaryItemService.listBySn("communicationMethod");
+        List<SystemDictionaryItem> types = dictionaryItemService.listBySn("tracePurpose");
+        
+        // 查询所有员工
+        List<Employee> employees = employeeService.getAll();
+        List<Employee> sellers = employeeService.getAll();
+        
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("sources", sources);
+        model.addAttribute("traceTypeIds", traceTypeIds);
+        model.addAttribute("types", types);
+        model.addAttribute("employees", employees);
+        model.addAttribute("sellers", sellers);
         
         return "customer/potentialcustomerlist";
     }
@@ -102,7 +124,21 @@ public class CustomerController {
         qo.setStatus(1L); // 正式客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
+        // 查询数据字典和员工列表
+        List<SystemDictionaryItem> jobs = dictionaryItemService.listBySn("job");
+        List<SystemDictionaryItem> sources = dictionaryItemService.listBySn("source");
+        List<SystemDictionaryItem> traceTypeIds = dictionaryItemService.listBySn("communicationMethod");
+        List<SystemDictionaryItem> types = dictionaryItemService.listBySn("tracePurpose");
+        List<Employee> employees = employeeService.getAll();
+        List<Employee> sellers = employeeService.getAll();
+        
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("sources", sources);
+        model.addAttribute("traceTypeIds", traceTypeIds);
+        model.addAttribute("types", types);
+        model.addAttribute("employees", employees);
+        model.addAttribute("sellers", sellers);
         
         return "customer/formallist";
     }
@@ -117,7 +153,21 @@ public class CustomerController {
         qo.setStatus(2L); // 流失客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
+        // 查询数据字典和员工列表
+        List<SystemDictionaryItem> jobs = dictionaryItemService.listBySn("job");
+        List<SystemDictionaryItem> sources = dictionaryItemService.listBySn("source");
+        List<SystemDictionaryItem> traceTypeIds = dictionaryItemService.listBySn("communicationMethod");
+        List<SystemDictionaryItem> types = dictionaryItemService.listBySn("tracePurpose");
+        List<Employee> employees = employeeService.getAll();
+        List<Employee> sellers = employeeService.getAll();
+        
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("sources", sources);
+        model.addAttribute("traceTypeIds", traceTypeIds);
+        model.addAttribute("types", types);
+        model.addAttribute("employees", employees);
+        model.addAttribute("sellers", sellers);
         
         return "customer/losecustomerlist";
     }
@@ -132,7 +182,21 @@ public class CustomerController {
         qo.setStatus(3L); // 失败客户状态
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
+        // 查询数据字典和员工列表
+        List<SystemDictionaryItem> jobs = dictionaryItemService.listBySn("job");
+        List<SystemDictionaryItem> sources = dictionaryItemService.listBySn("source");
+        List<SystemDictionaryItem> traceTypeIds = dictionaryItemService.listBySn("communicationMethod");
+        List<SystemDictionaryItem> types = dictionaryItemService.listBySn("tracePurpose");
+        List<Employee> employees = employeeService.getAll();
+        List<Employee> sellers = employeeService.getAll();
+        
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("sources", sources);
+        model.addAttribute("traceTypeIds", traceTypeIds);
+        model.addAttribute("types", types);
+        model.addAttribute("employees", employees);
+        model.addAttribute("sellers", sellers);
         
         return "customer/failcustomerlist";
     }

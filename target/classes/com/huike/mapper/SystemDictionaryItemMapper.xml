@@ -32,7 +32,7 @@
     
     <!-- 根据字典SN查询字典项列表 -->
     <select id="listBySn" resultMap="BaseResultMap">
-        SELECT sdi.<include refid="Base_Column_List" />
+        SELECT sdi.id, sdi.parent_id, sdi.title, sdi.sequence
         FROM systemdictionaryitem sdi
         INNER JOIN systemdictionary sd ON sdi.parent_id = sd.id
         WHERE sd.sn = #{sn}
