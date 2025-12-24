@@ -29,4 +29,7 @@ public interface EmployeeMapper {
 
     @Delete("delete from employee_role where employee_id = #{employeeId}")
     void deleteMidByEmpId(Long employeeId);
+    
+    @Select("select * from employee")
+    List<Employee> getAll();
 }

@@ -37,7 +37,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public PageInfo<Customer> list(CustomerQuery qo) {
         PageHelper.startPage(qo.getCurrentPage(), qo.getPageSize());
-        List<Customer> customers = customerMapper.list(qo.getKeyword(), qo.getStatus().intValue());
+        Integer status = qo.getStatus() != null ? qo.getStatus().intValue() : null;
+        List<Customer> customers = customerMapper.list(qo.getKeyword(), status);
         
         // 填充关联对象
         for (Customer customer : customers) {
@@ -93,7 +94,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public PageInfo<Customer> listBySellerId(Long sellerId, CustomerQuery qo) {
         PageHelper.startPage(qo.getCurrentPage(), qo.getPageSize());
-        List<Customer> customers = customerMapper.listBySellerId(sellerId, qo.getStatus().intValue());
+        Integer status = qo.getStatus() != null ? qo.getStatus().intValue() : null;
+        List<Customer> customers = customerMapper.listBySellerId(sellerId, status);
         
         // 填充关联对象
         for (Customer customer : customers) {

@@ -46,13 +46,19 @@ public class CustomerController {
     public String list(Model model, @ModelAttribute("qo") CustomerQuery qo) {
         PageInfo<Customer> pageInfo = customerService.list(qo);
         
-        // 查询数据字典: 职业、来源
+        // 查询数据字典: 职业、来源、跟进类型
         List<SystemDictionaryItem> jobs = dictionaryItemService.listBySn("job");
         List<SystemDictionaryItem> sources = dictionaryItemService.listBySn("source");
+        List<SystemDictionaryItem> traceTypes = dictionaryItemService.listBySn("communicationMethod");
+        
+        // 查询所有员工作为销售人员选项
+        List<Employee> sellers = employeeService.getAll();
         
         model.addAttribute("pageInfo", pageInfo);
-        model.addAttribute("jobs", jobs);
-        model.addAttribute("sources", sources);
+        model.addAttribute("pageInfoJob", jobs);
+        model.addAttribute("pageInfoSource", sources);
+        model.addAttribute("pageInfoTraceType", traceTypes);
+        model.addAttribute("sellers", sellers);
         
         return "customer/list";
     }

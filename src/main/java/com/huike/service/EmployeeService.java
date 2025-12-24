@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.huike.entity.Employee;
 import com.huike.query.EmployeeQuery;
 
+import java.util.List;
+
 public interface EmployeeService {
     PageInfo<Employee> list(EmployeeQuery qo);
 
@@ -12,4 +14,6 @@ public interface EmployeeService {
     Employee getEmployeeById(Long id);
 
     void update(Employee employee, Integer[] roleIds);
+    
+    List<Employee> getAll();
 }
